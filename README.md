@@ -41,21 +41,11 @@ data "aws_ami" "chef_automate_image" {
   }
 }
 
-<<<<<<< HEAD
 module "chef_automate" {
   source                      = "devoptimist/chef-automate/aws"
-  version                     = "0.1.0"
+  version                     = "0.0.2"
   name                        = "chef-automate" 
-=======
-module "chef_server" {
-  source                      = "devoptimist/chef-server/aws"
-  version                     = "0.0.7"
-  name                        = "chef-server" 
->>>>>>> dfae90c6ac14db5c970e0bb55a876ea5cb36e852
-  chef_user                   = "mike"
-  chef_pass                   = "P@55w0rd1"
-  chef_org                    = "org1"
-  chef_automate_version       = "12.19.44"
+  chef_automate_version       = "latest"
   instance_count              = 1
   ami                         = "${module.chef_automate_image.ami_id}"
   instance_type               = "t2.medium"
