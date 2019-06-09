@@ -43,7 +43,7 @@ data "aws_ami" "chef_automate_image" {
 
 module "chef_automate" {
   source                      = "devoptimist/chef-automate/aws"
-  version                     = "0.0.2"
+  version                     = "0.0.3"
   name                        = "chef-automate" 
   chef_automate_version       = "latest"
   instance_count              = 1
