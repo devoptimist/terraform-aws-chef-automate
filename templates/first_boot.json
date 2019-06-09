@@ -1,0 +1,12 @@
+{
+  "chef_automate_wrapper": {
+    "channel": "${channel}",
+    "version": "${version}",
+    "config": "${config}",
+    "accept_license": "${accept_license}",
+    "creds_json_path": "${creds_json_path}",
+    "dc_token": "${dc_token}",
+    "fqdn": "${fqdn}",
+    "admin_password": "${admin_password}"
+  }
+}
