@@ -10,7 +10,7 @@ output "automate_ssh_pass" {
   value = var.system_user_pass
 }
 
-output "autoamte_admin_user" {
+output "automate_admin_user" {
   value = data.external.a2_secrets.result["username"]
 }
 

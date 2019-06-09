@@ -52,7 +52,8 @@ variable "chef_automate_version" {
 }
 
 variable "chef_automate_config" {
-  default = true
+  type    = "string"
+  default = ""
 }
 
 variable "chef_automate_accept_license" {

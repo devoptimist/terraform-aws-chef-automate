@@ -13,7 +13,8 @@ locals {
     creds_json_path      = var.chef_automate_json_credentials_path,
     dc_token             = var.chef_automate_data_collector_token,
     fqdn                 = var.chef_automate_hostname,
-    admin_password       = var.chef_automate_admin_password
+    admin_password       = var.chef_automate_admin_password,
+    data_script          = var.data_script
   })
 }
 

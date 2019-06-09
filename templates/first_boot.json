@@ -7,6 +7,7 @@
     "creds_json_path": "${creds_json_path}",
     "dc_token": "${dc_token}",
     "fqdn": "${fqdn}",
-    "admin_password": "${admin_password}"
+    "admin_password": "${admin_password}",
+    "data_script": "${data_script}"
   }
 }
