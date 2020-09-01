@@ -1,83 +1,34 @@
-locals {
-  bootstrap  = templatefile("${path.module}/templates/bootstrap.sh", {
-    create_system_user         = var.create_system_user,
-    system_user_name           = var.system_user_name,
-    system_user_pass           = var.system_user_pass,
-    system_user_public_ssh_key = var.system_user_public_ssh_key
-  })
-  first_boot = templatefile("${path.module}/templates/first_boot.json", {
-    channel              = var.chef_automate_channel,
-    version              = var.chef_automate_version,
-    config               = var.chef_automate_config,
-    accept_license       = var.chef_automate_accept_license,
-    creds_json_path      = var.chef_automate_json_credentials_path,
-    dc_token             = var.chef_automate_data_collector_token,
-    fqdn                 = var.chef_automate_hostname,
-    admin_password       = var.chef_automate_admin_password,
-    data_script          = var.data_script
-  })
+provider "aws" {
+  shared_credentials_file = var.aws_creds_file
+  profile                 = var.aws_profile
+  region                  = var.aws_region
 }
 
-module "chef_automate" {
-  source                      = "terraform-aws-modules/ec2-instance/aws"
-  version                     = "2.0.0"
-  name                        = var.name
-  instance_count              = var.instance_count
-  ami                         = var.ami
-  instance_type               = var.instance_type
-  associate_public_ip_address = var.associate_public_ip_address
-  key_name                    = var.key_name
-  monitoring                  = true
-  vpc_security_group_ids      = var.vpc_security_group_ids
-  subnet_id                   = var.subnet_id
-  root_block_device = [{
-    volume_type = "gp2"
-    volume_size = var.root_disk_size
-  }]
-  tags                        = var.tags
-  user_data                   = local.bootstrap
-
+provider "external" {
+  version = "~> 1.2"
 }
 
-resource "null_resource" "chef_run" {
-
-  connection {
-    user        = var.system_user_name
-    password    = var.system_user_pass
-    host        = module.chef_automate.public_ip[0]
-  }
-
-  provisioner "file" {
-    source      = "${path.module}/files/Policyfile.rb"
-    destination = "${var.tmp_path}/Policyfile.rb"
-  }
-
-  provisioner "file" {
-    content     = local.first_boot
-    destination = "${var.tmp_path}/first-boot.json"
-  }
-
-  provisioner "remote-exec" {
-    inline = [
-      "curl -LO https://www.chef.io/chef/install.sh && sudo bash ./install.sh -P ${var.chef_bootstrap_product} -v ${var.chef_bootstrap_version}",
-      "chef install ${var.tmp_path}/Policyfile.rb",
-      "chef export ${var.tmp_path}/Policyfile.rb . -a",
-      "mv chef_automate_wrapper-*.tgz ${var.tmp_path}/cookbooks.tgz",
-      "sudo chef-solo --recipe-url ${var.tmp_path}/cookbooks.tgz -j ${var.tmp_path}/first-boot.json --chef-license accept"
-    ]
-  }
-  depends_on = ["module.chef_automate"]
+provider "null" {
+  version = "~> 2.1"
 }
 
-data "external" "a2_secrets" {
-  program = ["bash", "${path.module}/files/data_source.sh"]
-  depends_on = ["null_resource.chef_run"]
+provider "random" {
+  version = "~> 2.2"
+}
 
-  query = {
-    ssh_user        = "${var.system_user_name}"
-    ssh_key         = "${var.system_user_private_ssh_key}"
-    ssh_pass        = "${var.system_user_pass}"
-    automate_ip     = "${module.chef_automate.public_ip[0]}"
-    data_script     = "${var.data_script}"
-  }
+module "automate" {
+  source                        = "./modules/automate_vm"
+  automate_create               = var.automate_create
+  automate_cidrs                = var.automate_cidrs
+  automate_key_name             = var.automate_key_name
+  automate_instance_type        = var.automate_instance_type
+  automate_ssh_user_private_key = var.automate_ssh_user_private_key
+  automate_products             = var.automate_products
+  automate_config               = var.automate_config
+  automate_ingest_token         = var.automate_ingest_token 
+  automate_admin_password       = var.automate_admin_password
+  automate_os_name              = var.automate_os_name
+  automate_license              = var.automate_license
+  automate_enabled_profiles     = var.automate_enabled_profiles
+  tags                          = var.tags
 }

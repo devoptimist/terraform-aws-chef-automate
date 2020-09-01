@@ -1,0 +1,25 @@
+aws_region                          = ""
+aws_profile                         = "" # normally default
+aws_creds_file                      = ""
+
+automate_cidrs                      = ["0.0.0.0/0"] # used to limit access to chef auomate vm
+automate_key_name                   = ""
+automate_ssh_user_private_key       = "<path_to_private_key>"
+automate_ingest_token               = "<specify_an_ingest_token_string>" # imported into automate, helpful for testing
+automate_admin_password             = "<automate_admin_pass>"
+automate_os_name                    = "centos-7"
+
+automate_create                     = true
+
+automate_instance_type              = "t3.large"
+automate_products                   = ["automate"] # or ["automate", "infra-server"] 
+
+automate_license = ""
+
+automate_enabled_profiles = [] # a list of hashes containing profiles to enable by default 
+
+tags = {
+  "X-Dept" = "",
+  "X-Contact" = "",
+  "X-Project" = ""
+}
