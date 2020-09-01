@@ -24,7 +24,7 @@ automate_admin_password             = "zaq12wsx"
 automate_create                     = true
 
 automate_instance_type              = "t3.large"
-automate_products                   = ["automate", "infra-server"]
+automate_products                   = ["automate"] # or ["automate", "infra-server"] for automate and chef server
 
 automate_license = "dadjaslkdjsakldjaslkjdlaskjdlaskdjaskldjaskldjaskldj
 
@@ -48,4 +48,4 @@ tags = {
 }
 ```
 
-the profiles specified in the `automate_enabled_profiles` list will be automatically enabled on the chef automate instance. And an ingest token will be create matching the string provided in the `automate_ingest_token` variable
+the profiles specified in the `automate_enabled_profiles` list will be automatically enabled on the chef automate instance. And an ingest token will be created matching the string provided in the `automate_ingest_token` variable
