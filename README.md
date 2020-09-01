@@ -5,9 +5,14 @@ Currently only supports RHEL 7 compatible images.
 ## Usage
 
 ```hcl
+provider "aws" {
+  region = "${var.aws_region}"
+}
 
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
+  # Note: for version 0.12+ of terraform use version 2.0.0+
+  # See https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/2.48.0#terraform-versions
   version = "1.64.0"
 
   name = "chef-automate-vpc"
@@ -21,6 +26,8 @@ module "vpc" {
 
 module "sg" {
   source  = "terraform-aws-modules/security-group/aws"
+  # Note: for version 0.12+ of terraform use version 3.0.0+
+  # See https://registry.terraform.io/modules/terraform-aws-modules/security-group/aws/3.16.0#terraform-versions
   version = "2.17.0"
 
   name        = "chef-automate-security-group"
@@ -29,6 +36,7 @@ module "sg" {
   ingress_rules       = ["ssh-tcp","https-443-tcp"]
   egress_rules        = ["all-all"]
   ingress_cidr_blocks = ["0.0.0.0/0"]
+  egress_cidr_blocks = ["0.0.0.0/0"]
 }
 
 data "aws_ami" "chef_automate_image" {
@@ -42,7 +50,7 @@ data "aws_ami" "chef_automate_image" {
 }
 
 module "chef_automate" {
-  source                      = "devoptimist/chef-automate/aws"
+  source                      = "srb3/chef-automate/aws"
   version                     = "0.0.3"
   name                        = "chef-automate" 
   chef_automate_version       = "latest"
@@ -51,7 +59,7 @@ module "chef_automate" {
   instance_type               = "t2.medium"
   key_name                    = "my_aws_key"
   vpc_security_group_ids      = ["${module.sg.this_security_group_id}"]
-  subnet_ids                  = ["${module.vpc.public_subnets}"]
+  subnet_id                   = ["${module.vpc.public_subnets}"]
   root_disk_size              = 40
   tags                        = "${var.tags}"
 }
@@ -68,6 +76,6 @@ module "chef_automate" {
 |instance_type|The aws instance size to create the chef automate from|string|t2.medium|no|
 |key_name|The name of aws ssh key to associate with this instance|string||yes|
 |vpc_security_group_ids|A list of security group ids to associage with this instance|list||yes|
-|subnet_ids|A list of subnet ids to associate with this instance|list||yes|
+|subnet_id|A list of subnet ids to associate with this instance|list||yes|
 |root_disk_size|The size (in GB) of the root disk for the chef automate server|string|40|no|
 |tags|A map of tags to associate with the instance|map|{}|no|
