@@ -13,3 +13,7 @@ output "nat_cidrs" {
 output "vpc_cidr" {
   value = module.automate_vpc.vpc_cidr_block
 }
+
+output "ingest_token" {
+  value = module.automate_populate.ingest_token
+}

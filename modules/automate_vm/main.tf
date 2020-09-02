@@ -106,7 +106,7 @@ module "automate_install" {
 
 module "automate_populate" {
   source                      = "srb3/chef-automate-populate/linux"
-  version                     = "0.0.15"
+  version                     = "0.0.16"
   ips                         = flatten(module.automate_instance.public_ip)
   instance_count              = local.instance_count
   user_name                   = local.user
