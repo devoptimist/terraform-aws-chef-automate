@@ -26,11 +26,12 @@ automate_create                     = true
 automate_instance_type              = "t3.large"
 automate_products                   = ["automate"] # or ["automate", "infra-server"] for automate and chef server
 
-automate_license = "dadjaslkdjsakldjaslkjdlaskjdlaskdjaskldjaskldjaskldj
+# Note this should only be provided with a valid Automate license
+automate_license = "dadjaslkdjsakldjaslkjdlaskjdlaskdjaskldjaskldjaskldj"
 
 automate_enabled_profiles = [
   {
-    "name"     = "cis-aws-benchmark-level1",
+    "name"    = "cis-aws-benchmark-level1",
     "version" = "latest",
     "owner"   = "admin"
   },
