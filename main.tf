@@ -16,19 +16,45 @@ provider "random" {
   version = "~> 2.2"
 }
 
-module "automate" {
-  source                        = "./modules/automate_vm"
-  automate_create               = var.automate_create
-  automate_cidrs                = var.automate_cidrs
-  automate_key_name             = var.automate_key_name
-  automate_instance_type        = var.automate_instance_type
-  automate_ssh_user_private_key = var.automate_ssh_user_private_key
-  automate_products             = var.automate_products
-  automate_config               = var.automate_config
-  automate_ingest_token         = var.automate_ingest_token 
-  automate_admin_password       = var.automate_admin_password
-  automate_os_name              = var.automate_os_name
-  automate_license              = var.automate_license
-  automate_enabled_profiles     = var.automate_enabled_profiles
-  tags                          = var.tags
+locals {
+  instance_count = var.automate_create ? 1 : 0
+  ami_id         = var.automate_ami_id != null ? var.automate_ami_id : null
+  ssh_user       = var.automate_ami_id != null ? var.automate_ssh_user != null ? var.automate_ssh_user : "root" : module.automate_base.ssh_user
+}
+
+module "automate_base" {
+  source                      = "srb3/base/aws"
+  version                     = "0.0.1"
+  vm_key_name                 = var.automate_key_name
+  vm_instance_type            = var.automate_instance_type
+  security_group_access_cidrs = var.automate_cidrs
+  vm_ami_id                   = local.ami_id
+  vm_os_name                  = var.automate_os_name
+  base_create                 = var.automate_create
+}
+
+module "automate_install" {
+  source                      = "srb3/chef-automate/linux"
+  version                     = "0.0.33"
+  ips                         = module.automate_base.public_ip
+  instance_count              = local.instance_count
+  ssh_user_name               = local.ssh_user
+  ssh_user_private_key        = var.automate_ssh_user_private_key
+  products                    = var.automate_products
+  config                      = var.automate_config
+  admin_password              = var.automate_admin_password
+  ingest_token                = var.automate_ingest_token
+  hostname_method             = var.automate_hostname_method
+  chef_automate_license       = var.automate_license
+}
+
+module "automate_populate" {
+  source                      = "srb3/chef-automate-populate/linux"
+  version                     = "0.0.16"
+  ips                         = module.automate_instance.public_ip
+  instance_count              = local.instance_count
+  ssh_user_name               = local.ssh_user
+  user_private_key            = var.automate_ssh_user_private_key
+  enabled_profiles            = var.automate_enabled_profiles
+  automate_module             = jsonencode(module.automate_install)
 }
