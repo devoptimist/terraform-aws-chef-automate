@@ -51,7 +51,7 @@ tags = {
   "X-Project" = "testing"
 }
 ```
-### 1. As a module
+### 2. As a module
 
 You can refer to this code as a module in your own terraform file.
 
@@ -82,7 +82,7 @@ module "some_other_terraform" {
 
 module "automate" {
   source                        = "srb3/chef-automate/aws"
-  version                       = "0.0.10"
+  version                       = "0.0.11"
   aws_region                    = var.aws_region
   aws_profile                   = var.aws_profile
   aws_creds_file                = var.aws_creds_file
