@@ -52,7 +52,7 @@ module "automate_install" {
 module "automate_populate" {
   source                      = "srb3/chef-automate-populate/linux"
   version                     = "0.0.16"
-  ips                         = module.automate_instance.public_ip
+  ips                         = module.automate_base.public_ip
   instance_count              = local.instance_count
   user_name                   = local.ssh_user
   user_private_key            = var.automate_ssh_user_private_key

@@ -37,6 +37,18 @@ variable "tags" {
 
 ########### automate vm settings #################
 
+variable "automate_ami_id" {
+  description = "If set the automate server will be created on an ami matching the id in this variable"
+  type        = string
+  default     = null
+}
+
+variable "automate_ssh_user" {
+  description = "If using a custom ami id, then set this variable to the name of the ssu user for that ami"
+  type        = string
+  default     = null
+}
+
 variable "automate_cidrs" {
   description = "A list of CIDR's to use for allowing access to the automate vm"
   type        = list(string)

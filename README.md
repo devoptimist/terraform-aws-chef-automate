@@ -7,10 +7,13 @@ Quickly create a chef automate instace for testing
   * SUSE
 
 ## Usage
-Copy the terraform.tfvars.example file to terraform.tfvars and fill in the missing
+There are two ways to consume this module:
+
+### 1. Direct
+clone the repo from github, copy the terraform.tfvars.example file to terraform.tfvars and fill in the missing
 variables
 
-### Example
+#### Example
 ```
 aws_region                          = "eu-west-1"
 aws_profile                         = "testing"
@@ -48,5 +51,56 @@ tags = {
   "X-Project" = "testing"
 }
 ```
+### 1. As a module
+
+You can refer to this code as a module in your own terraform file.
+
+#### Example
+```
+variable "aws_region" {}
+variable "aws_profile" {}
+variable "aws_creds_file" {}
+
+variable "automate_create" {}
+variable "automate_key_name" {}
+variable "automate_instance_type" {}
+variable "automate_cidrs" {}
+variable "automate_ssh_user_private_key" {}
+variable "automate_ingest_token" {}
+variable "automate_admin_password" {}
+variable "automate_products" {}
+variable "automate_license" {}
+variable "automate_enabled_profiles" {}
+
+variable "tags" {}
+
+module "some_other_terraform" {
+...
+...
+...
+}
+
+module "automate" {
+  source                        = "srb3/chef-automate/aws"
+  version                       = "0.0.10"
+  aws_region                    = var.aws_region
+  aws_profile                   = var.aws_profile
+  aws_creds_file                = var.aws_creds_file
+  automate_create               = var.automate_create
+  automate_key_name             = var.automate_key_name
+  automate_instance_type        = var.automate_instance_type
+  automate_cidrs                = var.automate_cidrs
+  automate_ssh_user_private_key = var.automate_ssh_user_private_key
+  automate_ingest_token         = var.automate_ingest_token
+  automate_admin_password       = var.automate_admin_password
+  automate_products             = var.automate_products
+  automate_license              = var.automate_license
+  automate_enabled_profiles     = var.automate_enabled_profiles
+  tags                          = var.tags
+}
+
+```
+
+
 
 the profiles specified in the `automate_enabled_profiles` list will be automatically enabled on the chef automate instance. And an ingest token will be created matching the string provided in the `automate_ingest_token` variable

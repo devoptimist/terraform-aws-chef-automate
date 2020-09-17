@@ -1,7 +1,7 @@
 output "automate_ip" {
-  value = module.automate.public_ip_address
+  value = module.automate_base.public_ip
 }
 
 output "ingest_token" {
-  value = module.automate.ingest_token
+  value = module.automate_install.token
 }
