@@ -31,6 +31,7 @@ module "automate_base" {
   vm_ami_id                   = local.ami_id
   vm_os_name                  = var.automate_os_name
   base_create                 = var.automate_create
+  tags                        = var.tags
 }
 
 module "automate_install" {
