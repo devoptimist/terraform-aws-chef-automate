@@ -23,12 +23,6 @@ variable "automate_create" {
   default     = false
 }
 
-variable "bastion_create" {
-  description = "A boolean to dictate if we create an instance of automate cluster bastion node"
-  type        = bool
-  default     = false
-}
-
 variable "tags" {
   description = "A set of tags to assign to the instances created by this module"
   type        = map(string)
@@ -37,10 +31,34 @@ variable "tags" {
 
 ########### automate vm settings #################
 
+variable "automate_vpc_id" {
+  description = "The id of an aws vpc to use for our instnace, if you already have a vpc you want to use enter it's id in this variable. Otherwise leave as null"
+  type        = string
+  default     = null
+}
+
+variable "automate_subnet_ids" {
+  description = "If a list of subnet ids are assigned to this variable then the automate instance will use them, if left blank the automate instance will use the default vpc public subnet"
+  type        = list(string)
+  default     = null
+}
+
+variable "automate_security_group_ids" {
+  description = "If a list of security groups are assigned to this variable then the automate instance will use them. If the variable is left as null then the automate instance will use the default security group"
+  type        = list(string)
+  default     = null
+}
+
 variable "automate_ami_id" {
   description = "If set the automate server will be created on an ami matching the id in this variable"
   type        = string
   default     = null
+}
+
+variable "automate_os_name" {
+  description = "The name of the operating system to use"
+  type        = string
+  default     = "centos-7"
 }
 
 variable "automate_ssh_user" {
@@ -107,12 +125,6 @@ variable "automate_hostname_method" {
   description = "The method to use for setting the hostname."
   type        = string
   default     = "cloud"
-}
-
-variable "automate_os_name" {
-  description = "The name of the operating system to use"
-  type        = string
-  default     = "centos-7"
 }
 
 ########### automate populate settings ##########
