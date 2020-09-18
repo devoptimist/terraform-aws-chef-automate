@@ -30,6 +30,9 @@ module "automate_base" {
   security_group_access_cidrs = var.automate_cidrs
   vm_ami_id                   = local.ami_id
   vm_os_name                  = var.automate_os_name
+  vpc_id                      = var.automate_vpc_id
+  vm_security_group_ids       = var.automate_security_group_ids
+  vm_subnet_ids               = var.automate_subnet_ids
   base_create                 = var.automate_create
   tags                        = var.tags
 }
