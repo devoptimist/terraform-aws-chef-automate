@@ -1,22 +1,21 @@
-output "automate_ip" {
-  value = module.automate_base.public_ip
+locals {
+  ui = [
+    for i in module.automate_base.public_ip :
+      "https://${i}"
+  ]
+  connection_string = [
+    for i in module.automate_base.public_ip :
+      "ssh -i ${var.automate_ssh_user_private_key} ${module.automate_base.ssh_user}@${i}"
+  ]
+}
+output "ssh_command" {
+  value = local.connection_string
 }
 
 output "ingest_token" {
   value = module.automate_install.token
 }
 
-output "public_subnet_ids" {
-  description = "A list of public subnet ids associated with this vpc"
-  value       = module.automate_base.public_subnet_ids
-}
-
-output "sec_grp_ids" {
-  description = "A list of security groups associated with this vpc"
-  value       = module.automate_base.sec_grp_ids
-}
-
-output "vpc_id" {
-  description = "A list of security groups associated with this vpc"
-  value       = module.automate_base.vpc_id
+output "UI" {
+  value = local.ui
 }
