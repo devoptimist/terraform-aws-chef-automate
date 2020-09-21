@@ -24,7 +24,7 @@ locals {
 
 module "automate_base" {
   source                      = "srb3/base/aws"
-  version                     = "0.0.1"
+  version                     = "0.13.0"
   vm_key_name                 = var.automate_key_name
   vm_instance_type            = var.automate_instance_type
   security_group_access_cidrs = var.automate_cidrs
@@ -39,7 +39,7 @@ module "automate_base" {
 
 module "automate_install" {
   source                      = "srb3/chef-automate/linux"
-  version                     = "0.0.33"
+  version                     = "0.13.0"
   ips                         = module.automate_base.public_ip
   instance_count              = local.instance_count
   ssh_user_name               = local.ssh_user
@@ -54,7 +54,7 @@ module "automate_install" {
 
 module "automate_populate" {
   source                      = "srb3/chef-automate-populate/linux"
-  version                     = "0.0.16"
+  version                     = "0.13.0"
   ips                         = module.automate_base.public_ip
   instance_count              = local.instance_count
   user_name                   = local.ssh_user

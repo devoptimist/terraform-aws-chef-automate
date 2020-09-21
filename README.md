@@ -6,6 +6,9 @@ Quickly create a chef automate instace for testing
   * RHEL
   * SUSE
 
+#### Version Note
+The latest version of this repo only supports Terraform version 13, to use with terrafrom version 12 please one of the tags before v0.13.0
+
 ## Usage
 There are two ways to consume this module:
 
@@ -82,7 +85,7 @@ module "some_other_terraform" {
 
 module "automate" {
   source                        = "srb3/chef-automate/aws"
-  version                       = "0.0.11"
+  version                       = "0.13.1"
   aws_region                    = var.aws_region
   aws_profile                   = var.aws_profile
   aws_creds_file                = var.aws_creds_file
