@@ -54,6 +54,14 @@ tags = {
   "X-Project" = "testing"
 }
 ```
+Then run:
+```
+terraform init
+terraform plan
+terraform apply
+```
+
+
 ### 2. As a module
 
 You can refer to this code as a module in your own terraform file.
